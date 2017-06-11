@@ -83,10 +83,20 @@ class RadioGroup extends Component {
       this.state = {
         isEmpty: true
       }
+
+      this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange (event) {
+      this.setState({
+        isEmpty: false
+      })
+
+      this.props.onSelection(event);
     }
 
     render() {
-      const { optionsAvailables, name, onSelection } = this.props;
+      const { optionsAvailables, name } = this.props;
       const { isEmpty } = this.state;
       const optionsGroup = optionsAvailables.map((option, i) => {
         return (
@@ -95,7 +105,7 @@ class RadioGroup extends Component {
               type="radio"
               name={name}
               value={option}
-              onChange={onSelection}
+              onChange={this.handleChange}
             />
             <label>{option}</label>
           </div>
