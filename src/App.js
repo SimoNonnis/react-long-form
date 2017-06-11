@@ -25,21 +25,17 @@ class Form extends Component {
     super(props)
 
     this.state = {
-      data: {}
+      data: {},
+      isValid: false
     }
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.onSelection = this.onSelection.bind(this);
-    this.isValid = this.isValid.bind(this);
   }
 
   onFormSubmit(event) {
     event.preventDefault();
     console.log('Form submitted!');
-  }
-
-  isValid() {
-    return false;
   }
 
   onSelection(event) {
@@ -53,6 +49,7 @@ class Form extends Component {
   }
 
   render() {
+    const { isValid } = this.state;
     return (
       <form onSubmit={this.onFormSubmit}>
         <h1>React Long Form</h1>
@@ -68,7 +65,7 @@ class Form extends Component {
           onSelection={this.onSelection}
         />
 
-        <button disabled={!this.isValid()}>Save</button>
+        <button disabled={!isValid}>Save</button>
       </form>
     )
   }
