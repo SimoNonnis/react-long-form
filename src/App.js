@@ -25,12 +25,13 @@ class Form extends Component {
     super(props)
 
     this.state = {
-      data: {},
-      fieldErrors: {}
+      data: {}
     }
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
     this.validate = this.validate.bind(this);
+    this.onSelection = this.onSelection.bind(this);
+
 
   }
 
@@ -43,6 +44,14 @@ class Form extends Component {
     return true;
   }
 
+  onSelection(event) {
+    const { name, value } = event.target;
+
+    this.setState({
+      data: this.state.data[name] = value
+    })
+  }
+
   render() {
     return (
       <form onSubmit={this.onFormSubmit}>
@@ -51,10 +60,12 @@ class Form extends Component {
         <RadioGroup
           optionsAvailables={options1}
           name={name1}
+          onSelection={this.onSelection}
         />
         <RadioGroup
           optionsAvailables={options2}
           name={name2}
+          onSelection={this.onSelection}
         />
 
         <button disabled={this.validate()}>Save</button>
@@ -75,12 +86,17 @@ class RadioGroup extends Component {
     }
 
     render() {
-      const { optionsAvailables, name } = this.props;
+      const { optionsAvailables, name, onSelection } = this.props;
       const { isEmpty } = this.state;
       const optionsGroup = optionsAvailables.map((option, i) => {
         return (
           <div key={i} >
-            <input type="radio" name={name}/>
+            <input
+              type="radio"
+              name={name}
+              value={option}
+              onChange={onSelection}
+            />
             <label>{option}</label>
           </div>
         )
