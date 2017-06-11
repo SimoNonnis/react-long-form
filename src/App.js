@@ -29,10 +29,9 @@ class Form extends Component {
     }
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
-    this.validate = this.validate.bind(this);
-    this.onSelection = this.onSelection.bind(this);
-
-
+    this.onSelection1 = this.onSelection1.bind(this);
+    this.onSelection2 = this.onSelection2.bind(this);
+    this.isValid = this.isValid.bind(this);
   }
 
   onFormSubmit(event) {
@@ -40,15 +39,27 @@ class Form extends Component {
     console.log('Form submitted!');
   }
 
-  validate() {
-    return true;
+  isValid() {
+    return false;
   }
 
-  onSelection(event) {
+  onSelection1(event) {
     const { name, value } = event.target;
+    let { data } = this.state;
+    data[name] = value;
 
     this.setState({
-      data: this.state.data[name] = value
+      data: data
+    })
+  }
+
+  onSelection2(event) {
+    const { name, value } = event.target;
+    let { data } = this.state;
+    data[name] = value;
+
+    this.setState({
+      data: data
     })
   }
 
@@ -60,22 +71,22 @@ class Form extends Component {
         <RadioGroup
           optionsAvailables={options1}
           name={name1}
-          onSelection={this.onSelection}
+          onSelection={this.onSelection1}
         />
         <RadioGroup
           optionsAvailables={options2}
           name={name2}
-          onSelection={this.onSelection}
+          onSelection={this.onSelection2}
         />
 
-        <button disabled={this.validate()}>Save</button>
+        <button disabled={!this.isValid()}>Save</button>
       </form>
     )
   }
 }
 
 
-// RadioGroup component
+// RadioGroup1 component
 class RadioGroup extends Component {
     constructor(props) {
       super(props);
