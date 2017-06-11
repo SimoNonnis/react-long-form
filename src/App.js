@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import './app.css';
 
 const options1 = ['orange', 'banana', 'mango', 'pear'];
 const options2 = ['dog', 'tiger', 'cat'];
@@ -24,10 +25,13 @@ class Form extends Component {
     super(props)
 
     this.state = {
-      data: {}
+      data: {},
+      fieldErrors: {}
     }
 
     this.onFormSubmit = this.onFormSubmit.bind(this);
+    this.validate = this.validate.bind(this);
+
   }
 
   onFormSubmit(event) {
@@ -35,15 +39,25 @@ class Form extends Component {
     console.log('Form submitted!');
   }
 
+  validate() {
+    return true;
+  }
+
   render() {
     return (
       <form onSubmit={this.onFormSubmit}>
         <h1>React Long Form</h1>
 
-        <RadioGroup optionsAvailables={options1} name={name1} />
-        <RadioGroup optionsAvailables={options2} name={name2} />
+        <RadioGroup
+          optionsAvailables={options1}
+          name={name1}
+        />
+        <RadioGroup
+          optionsAvailables={options2}
+          name={name2}
+        />
 
-        <button>Save</button>
+        <button disabled={this.validate()}>Save</button>
       </form>
     )
   }
@@ -52,20 +66,31 @@ class Form extends Component {
 
 // RadioGroup component
 class RadioGroup extends Component {
-  render() {
-    const { optionsAvailables } = this.props;
-    const { name } = this.props;
-    const optionsGroup = optionsAvailables.map((option, i) => {
+    constructor(props) {
+      super(props);
+
+      this.state = {
+        isEmpty: true
+      }
+    }
+
+    render() {
+      const { optionsAvailables, name } = this.props;
+      const { isEmpty } = this.state;
+      const optionsGroup = optionsAvailables.map((option, i) => {
+        return (
+          <div key={i} >
+            <input type="radio" name={name}/>
+            <label>{option}</label>
+          </div>
+        )
+      });
+
       return (
-        <div key={i} >
-          <input type="radio" name={name}/>
-          <label>{option}</label>
+        <div className="section" >
+          {optionsGroup}
+          {isEmpty && <p className="isEmpty" >Please, choose an option</p>}
         </div>
       )
-
-    })
-    return (
-      <div>{optionsGroup}</div>
-    )
-  }
+    }
 }
