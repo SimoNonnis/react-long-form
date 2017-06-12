@@ -4,8 +4,7 @@ import './app.css';
 
 const options1 = ['orange', 'banana', 'mango', 'pear'];
 const options2 = ['dog', 'tiger', 'cat'];
-const name1 = 'fruits';
-const name2 = 'animals';
+const names = ['fruits', 'animals'];
 
 
 
@@ -26,6 +25,8 @@ class Form extends Component {
 
     this.state = {
       data: {},
+      completedFields: [],
+      missingFields: [],
       isValid: false
     }
 
@@ -35,37 +36,62 @@ class Form extends Component {
 
   onFormSubmit(event) {
     event.preventDefault();
-    console.log('Form submitted!');
+    const { completedFields } = this.state;
+    const namesSet = new Set(names);
+    const completedFieldsSet = new Set(completedFields);
+    const notCompletedSections = new Set(
+      [...namesSet].filter(x => !completedFieldsSet.has(x))
+    );
+
+    this.setState({
+      missingFields: [...notCompletedSections]
+    })
+
+    if (notCompletedSections.size === 0) {
+      this.setState({
+        isValid: true,
+        missingFields: []
+      })
+      console.log('ALL GOOD, FORM SUBMITTED!');
+    }
   }
 
   onSelection(event) {
     const { name, value } = event.target;
-    let { data } = this.state;
+    let { data, completedFields } = this.state;
     data[name] = value;
 
+    if (!completedFields.includes(name)) {
+      completedFields.push(name);
+    }
+
     this.setState({
-      data: data
+      data: data,
+      completedFields: completedFields,
+      missingFields: []
     })
   }
 
   render() {
-    const { isValid } = this.state;
+    const { missingFields } = this.state;
     return (
       <form onSubmit={this.onFormSubmit}>
         <h1>React Long Form</h1>
 
         <RadioGroup
-          optionsAvailables={options1}
-          name={name1}
+          optionsAvailable={options1}
+          name={names[0]}
           onSelection={this.onSelection}
+          missingFields={missingFields}
         />
         <RadioGroup
-          optionsAvailables={options2}
-          name={name2}
+          optionsAvailable={options2}
+          name={names[1]}
           onSelection={this.onSelection}
+          missingFields={missingFields}
         />
 
-        <button disabled={!isValid}>Save</button>
+        <button >Save</button>
       </form>
     )
   }
@@ -78,10 +104,18 @@ class RadioGroup extends Component {
       super(props);
 
       this.state = {
-        isEmpty: true
+        isEmpty: null
       }
 
       this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentWillReceiveProps({ missingFields, name }) {
+      if ([...missingFields].includes(name)) {
+        this.setState({
+          isEmpty: true
+        })
+      }
     }
 
     handleChange (event) {
@@ -93,9 +127,9 @@ class RadioGroup extends Component {
     }
 
     render() {
-      const { optionsAvailables, name } = this.props;
+      const { optionsAvailable, name } = this.props;
       const { isEmpty } = this.state;
-      const optionsGroup = optionsAvailables.map((option, i) => {
+      const optionsGroup = optionsAvailable.map((option, i) => {
         return (
           <div key={i} >
             <input
