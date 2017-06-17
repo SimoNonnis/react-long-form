@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import './app.css';
+import styled from 'styled-components';
 
 const options1 = ['orange', 'banana', 'mango', 'pear'];
 const options2 = ['dog', 'tiger', 'cat'];
@@ -12,7 +13,7 @@ const names = ['fruits', 'animals'];
 export default class App extends Component {
   render() {
     return (
-      <Form />
+      <StyledForm />
     );
   }
 }
@@ -74,8 +75,9 @@ class Form extends Component {
 
   render() {
     const { missingFields } = this.state;
+    const { className } = this.props;
     return (
-      <form onSubmit={this.onFormSubmit}>
+      <form className={className} onSubmit={this.onFormSubmit}>
         <h1>React Long Form</h1>
 
         <RadioGroup
@@ -96,6 +98,10 @@ class Form extends Component {
     )
   }
 }
+
+const StyledForm = styled(Form)`
+  color: tomato;
+`;
 
 
 // RadioGroup1 component
