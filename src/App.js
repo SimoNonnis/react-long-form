@@ -1,7 +1,9 @@
 // @flow
 import React, { Component } from 'react';
-import './app.css';
+import TagsDemo from './Tags/demo.js';
 import styled from 'styled-components';
+
+import './app.css';
 
 const options1 = ['orange', 'banana', 'mango', 'pear'];
 const options2 = ['dog', 'tiger', 'cat'];
@@ -92,6 +94,7 @@ class Form extends Component {
           onSelection={this.onSelection}
           missingFields={missingFields}
         />
+        <TagsDemo />
 
         <button >Save</button>
       </form>
